@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Stragali Messager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+  <div id="login" class="login-container">
+    <div class="header">Stragali Messager</div>
+    <h2>Login / Register</h2>
+    <div class="input-group">
+      <input id="loginUsername" placeholder="Username">
+    </div>
+    <div class="input-group">
+      <input id="loginPassword" type="password" placeholder="Password">
+    </div>
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
+  </div>
+
+  <div id="chat" class="chat-container">
+    <div class="chat-header">Stragali Messager</div>
+    <div id="messages" class="chat-messages">
+      <p style="text-align:center; color:gray;">Please login to send and view messages.</p>
+    </div>
+    <div class="chat-input">
+      <div class="input-row">
+        <input id="message" placeholder="Type your message">
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+      <button class="delete-btn">ΚΟΥΜΠΙ ΕΚΤΑΚΤΗΣ ΑΝΑΓΚΗΣ</button>
+    </div>
+  </div>
+</div>
+
+<div id="notification" class="notification"></div>
+
+<!-- Emergency Delete Popup -->
+<div id="deletePopup">
+  <div class="popup-content">
+    <h3 style="color: red;">ΠΡΟΣΟΧΗ!</h3>
+    <p style="text-align: left; font-size: 14px;">
+      ΠΡΑΓΜΑΤΟΠΟΙΟΝΤΑΣ ΑΥΤΗΝ ΤΗΝ ΕΝΕΡΓΕΙΑ ΕΝΔΕΧΕΤΑΙ ΝΑ ΣΥΜΒΟΥΝ ΤΑ ΠΑΡΑΚΑΤΩ:<br><br>
+      - ΑΥΤΟΜΑΤΗ ΑΛΛΑΓΗ ΤΟΥ ΚΩΔΙΚΟΥ ΠΡΟΣΒΑΣΗΣ<br>
+      - ΔΙΑΓΡΑΦΗ ΟΛΩΝ ΤΩΝ ΣΥΝΟΜΙΛΙΩΝ<br>
+      - ΚΛΕΙΔΩΜΑ ΤΗΣ ΣΥΝΟΜΙΛΙΑΣ ΕΩΣ ΤΟ ΧΕΙΡΟΚΙΝΗΤΟ ΞΕΚΛΕΙΔΩΜΑ ΑΠΟ ΤΟΝ SERVER
+    </p>
+    <input type="password" id="deletePassword"><br><br>
+    <button onclick="confirmDelete()">ΣΥΝΕΧΕΙΑ</button>
+    <button onclick="closeDeletePopup()">ΑΚΥΡΟ</button>
+  </div>
+</div>
+
+<div class="version">Version 1.1</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
