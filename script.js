@@ -1,4 +1,4 @@
-const serverURL = "https://script.google.com/macros/s/AKfycbzj3wCVyexztfrMt53OaGknZH2yVCW-YGXxOSlj4MT8ZoqpRAg9V56L6egjrtoa4ToqxQ/exec";
+const serverURL = "https://script.google.com/macros/s/AKfycbxRGNO4rT8C5MEILdURnyMgzJvbSKwCwdgnl0afa487-Qfc2pSLinyHU_BcxpcWfdc91Q/exec";
 let currentUser = null;
 
 function showNotification(message) {
@@ -145,3 +145,4 @@ function confirmDelete() {
     closeDeletePopup();
   });
 }
+
