@@ -58,16 +58,6 @@ button:hover {
   flex-direction: column;
 }
 
-.version {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  font-size: 12px;
-  color: gray;
-  font-style: italic;
-}
-
-
 .chat-header {
   background-color: #000000;
   color: white;
@@ -196,3 +186,4 @@ button:hover {
   transform: translateY(-50%);
   cursor: pointer;
 }
+
