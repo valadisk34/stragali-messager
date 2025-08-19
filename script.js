@@ -1,6 +1,8 @@
-const serverURL = "https://script.google.com/macros/s/AKfycbyhJXHqrV6ohJ5u273r9T6ykz4ug3lxAIJ-A8IF1VNpwIUye69Funb6qT4j7jK6r7EbCA/exec";
+const serverURL = "https://script.google.com/macros/s/AKfycbyuJ7NqO4DVeejxiH77m3CCE4CfIKuDJWsiLTRZ2Skj2Md-5EHZVRMzukUBXK9AZo1d9Q/exec";
 let currentUser = null;
+let balanceInterval = null;
 
+// --- Notification
 function showNotification(message) {
   const notification = document.getElementById("notification");
   notification.textContent = message;
@@ -10,45 +12,19 @@ function showNotification(message) {
   }, 3000);
 }
 
-function login() {
-  const username = document.getElementById("loginUsername").value;
-  const password = document.getElementById("loginPassword").value;
-
-  fetch(serverURL, {
-    method: "POST",
-    body: JSON.stringify({action:"login", username, password})
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === "success") {
-      currentUser = {username, password};
-      document.getElementById("login").style.display = "none";
-      document.getElementById("chat").style.display = "flex";
-      loadMessages();
-    } else {
-      showNotification("Λάθος στοιχεία!");
-    }
-  });
+// --- Load User Info (Στραγάλια)
+async function loadUserInfo() {
+  if (!currentUser) return;
+  try {
+    const res = await fetch(`${serverURL}?action=getBalanceAndTitle&username=${encodeURIComponent(currentUser.username)}&password=${encodeURIComponent(currentUser.password)}`);
+    const data = await res.json();
+    document.getElementById("userInfo").innerText = `Στραγάλια: ${parseInt(data.balance) || 0}`;
+  } catch (err) {
+    console.error("Error fetching balance:", err);
+  }
 }
 
-function register() {
-  const username = document.getElementById("loginUsername").value;
-  const password = document.getElementById("loginPassword").value;
-
-  fetch(serverURL, {
-    method: "POST",
-    body: JSON.stringify({action:"register", username, password})
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === "success") {
-      showNotification("Εγγραφήκατε επιτυχώς, κάντε login!");
-    } else {
-      showNotification(data.message || "Σφάλμα στην εγγραφή.");
-    }
-  });
-}
-
+// --- Load Messages
 function loadMessages() {
   if (!currentUser) return;
   fetch(`${serverURL}?username=${currentUser.username}&password=${currentUser.password}`)
@@ -68,6 +44,7 @@ function loadMessages() {
     });
 }
 
+// --- Send Message
 function sendMessage() {
   if (!currentUser) return;
   const message = document.getElementById("message").value;
@@ -89,12 +66,14 @@ function sendMessage() {
     if (data.status === "success") {
       document.getElementById("message").value = "";
       loadMessages();
+      loadUserInfo(); // ενημέρωση Στραγαλιών μετά το μήνυμα
     } else {
       showNotification("Λάθος στοιχεία!");
     }
   });
 }
 
+// --- Delete Message
 function deleteMessage(id) {
   if (!currentUser) return;
   fetch(serverURL, {
@@ -117,9 +96,52 @@ function deleteMessage(id) {
   });
 }
 
-setInterval(loadMessages, 3000);
+// --- Login
+function login() {
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
 
-// Emergency Delete Popup
+  fetch(serverURL, {
+    method: "POST",
+    body: JSON.stringify({action:"login", username, password})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      currentUser = {username, password};
+      document.getElementById("login").style.display = "none";
+      document.getElementById("chat").style.display = "flex";
+      loadMessages();
+      loadUserInfo(); // φορτώνει τα Στραγάλια μόλις κάνει login
+
+      if(balanceInterval) clearInterval(balanceInterval);
+      balanceInterval = setInterval(loadUserInfo, 5000); // refresh κάθε 5 δευτερόλεπτα
+    } else {
+      showNotification("Λάθος στοιχεία!");
+    }
+  });
+}
+
+// --- Register
+function register() {
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
+
+  fetch(serverURL, {
+    method: "POST",
+    body: JSON.stringify({action:"register", username, password})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      showNotification("Εγγραφήκατε επιτυχώς, κάντε login!");
+    } else {
+      showNotification(data.message || "Σφάλμα στην εγγραφή.");
+    }
+  });
+}
+
+// --- Emergency Delete Popup
 document.querySelector(".delete-btn").addEventListener("click", () => {
   document.getElementById("deletePopup").style.display = "flex";
 });
@@ -146,4 +168,5 @@ function confirmDelete() {
   });
 }
 
-
+// --- Auto-refresh μηνυμάτων
+setInterval(loadMessages, 3000);
