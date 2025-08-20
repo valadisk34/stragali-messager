@@ -1,4 +1,4 @@
-const serverURL = "https://script.google.com/macros/s/AKfycbyFOhsMRSq6GSrxBcSV72xHc5hCbkQScmIEolI0XdGWDCmMufDOqv9Q2zGqPbbTP6IwdA/exec";
+const serverURL = "https://script.google.com/macros/s/AKfycbzT2aO645aQvUjEyPTTXWzRahPaUM-7vhsJOTyaZ1iCsjf5uhPICSwvw-KVs9ugnYXYWQ/exec";
 let currentUser = null;
 let balanceInterval = null;
 
@@ -170,5 +170,6 @@ function confirmDelete() {
 
 // --- Auto-refresh μηνυμάτων
 setInterval(loadMessages, 3000);
+
 
 
